@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -13,5 +13,5 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class AesaHistoricalVolumeData {
-    private Map<Date, Double> lastHistoricalVolumes;
+    private Map<String, Double> lastHistoricalVolumes = new HashMap<>();
 }
