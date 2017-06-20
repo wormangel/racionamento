@@ -1,7 +1,8 @@
-package net.wormangel.service;
+package com.github.wormangel.racionamento.service;
 
+import com.github.wormangel.racionamento.service.model.AesaHistoricalVolumeData;
+import com.github.wormangel.racionamento.service.model.AesaVolumeData;
 import lombok.extern.slf4j.Slf4j;
-import net.wormangel.service.model.AesaVolumeData;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -47,7 +49,7 @@ public class AesaSpider {
         return result;
     }
 
-//    public getHistoricalVolumeData() {
-//
-//    }
+    public AesaHistoricalVolumeData getHistoricalVolumeData() {
+        throw new NotImplementedException();
+    }
 }

@@ -1,4 +1,4 @@
-package net.wormangel.util;
+package com.github.wormangel.racionamento.util;
 
 import java.text.DecimalFormat;
 

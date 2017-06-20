@@ -1,10 +1,10 @@
-package net.wormangel.model;
+package com.github.wormangel.racionamento.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.Builder;
 import lombok.Data;
-import net.wormangel.util.FormattingUtils;
+import com.github.wormangel.racionamento.util.FormattingUtils;
 
 import java.util.Date;
 

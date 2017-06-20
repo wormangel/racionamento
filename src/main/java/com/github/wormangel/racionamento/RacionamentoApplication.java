@@ -1,4 +1,4 @@
-package net.wormangel;
+package com.github.wormangel.racionamento;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

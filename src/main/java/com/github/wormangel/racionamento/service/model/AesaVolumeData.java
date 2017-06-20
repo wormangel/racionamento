@@ -1,4 +1,4 @@
-package net.wormangel.service.model;
+package com.github.wormangel.racionamento.service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

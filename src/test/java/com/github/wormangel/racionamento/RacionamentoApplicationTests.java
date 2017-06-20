@@ -1,4 +1,4 @@
-package net.wormangel;
+package com.github.wormangel.racionamento;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

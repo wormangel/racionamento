@@ -1,7 +1,7 @@
-package net.wormangel.controller;
+package com.github.wormangel.racionamento.controller;
 
-import net.wormangel.model.BoqueiraoStatistics;
-import net.wormangel.service.StatisticsService;
+import com.github.wormangel.racionamento.model.BoqueiraoStatistics;
+import com.github.wormangel.racionamento.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,0 +1,31 @@
+package com.github.wormangel.racionamento.service;
+
+import com.github.wormangel.racionamento.model.BoqueiraoConstants;
+import com.github.wormangel.racionamento.service.model.AesaVolumeData;
+import com.github.wormangel.racionamento.model.BoqueiraoStatistics;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.text.ParseException;
+
+@Service
+public class StatisticsService {
+    @Autowired
+    private AesaSpider aesaSpider;
+
+    public BoqueiraoStatistics getStatistics() throws IOException, ParseException {
+        AesaVolumeData currentVolumeData = aesaSpider.getCurrentVolumeData();
+
+        return BoqueiraoStatistics.builder()
+                .maxVolume(BoqueiraoConstants.MAX_VOLUME)
+                .deadVolumeThreshold(BoqueiraoConstants.DEAD_VOLUME_THRESHOLD)
+                .rationingVolumeThreshold(BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD)
+                .currentVolume(currentVolumeData.getCurrentVolume())
+                .date(currentVolumeData.getMeasureDate())
+                .percentageFull((currentVolumeData.getCurrentVolume() / BoqueiraoConstants.MAX_VOLUME) * 100)
+                .over( currentVolumeData.getCurrentVolume() > BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD )
+                .build();
+    }
+
+}
