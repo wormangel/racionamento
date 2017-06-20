@@ -35,10 +35,17 @@ public class BoqueiraoStatistics {
     // Calculated
     
     private Double percentageFull;
+
     private boolean over;
+
     private Double measurementsDeltaAverage;
 
+    @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy")
+    private LocalDate happinessDate;
+    private int daysToHappiness;
+
     // Getters with formatting
+
     @JsonGetter("maxVolume")
     public String getMaxVolume() {
         return formatDouble(maxVolume);

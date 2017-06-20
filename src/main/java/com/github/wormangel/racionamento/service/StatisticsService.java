@@ -32,8 +32,14 @@ public class StatisticsService {
                 .reduce(0d, (a, b) -> b - a) / 10;
 
         // Calculate the predicted date at which the weir will be filled
+        double accumulatedVolume = currentVolumeData.getCurrentVolume();
+        int daysToHappiness = 0;
+        while (accumulatedVolume < BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD) {
+            accumulatedVolume += measurementsDelta;
+            daysToHappiness++;
+        }
 
-
+        LocalDate happinessDate = currentVolumeData.getMeasureDate().plusDays(daysToHappiness);
 
         return BoqueiraoStatistics.builder()
                 .maxVolume(BoqueiraoConstants.MAX_VOLUME)
@@ -45,6 +51,8 @@ public class StatisticsService {
                 .over( currentVolumeData.getCurrentVolume() > BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD )
                 .measurementsDeltaAverage(measurementsDelta)
                 .historicalVolumeData(historicalVolumeData)
+                .daysToHappiness(daysToHappiness)
+                .happinessDate(happinessDate)
                 .build();
     }
 
