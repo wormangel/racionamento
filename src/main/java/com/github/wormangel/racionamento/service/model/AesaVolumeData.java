@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -13,5 +13,5 @@ import java.util.Date;
 @AllArgsConstructor
 public class AesaVolumeData {
     private Double currentVolume;
-    private Date measureDate;
+    private LocalDate measureDate;
 }

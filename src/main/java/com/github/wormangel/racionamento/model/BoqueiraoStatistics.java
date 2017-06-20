@@ -3,15 +3,12 @@ package com.github.wormangel.racionamento.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.github.wormangel.racionamento.service.model.AesaHistoricalVolumeData;
-import groovy.util.MapEntry;
 import lombok.Builder;
 import lombok.Data;
-import com.github.wormangel.racionamento.util.FormattingUtils;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static com.github.wormangel.racionamento.util.FormattingUtils.formatDouble;
@@ -29,7 +26,7 @@ public class BoqueiraoStatistics {
 
     // Updated every day
     @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy")
-    private Date date;
+    private LocalDate date;
 
     private Double currentVolume;
 

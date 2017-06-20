@@ -10,16 +10,11 @@ import org.jsoup.select.Elements;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
 
 @Service
 @EnableCaching
@@ -54,7 +49,10 @@ public class AesaSpider {
                 // Strip the commas before parsing the double - here the volumes appear as full measures in cubic meters (m3),
                 // but with commas separating every three digits (for readability, I assume)
                 result.setCurrentVolume(Double.valueOf(currentVolumeText.replace(",", "")));
-                result.setMeasureDate(new SimpleDateFormat("dd/MM/yyyy").parse(measurementDateText));
+                result.setMeasureDate(LocalDate.of(
+                        Integer.parseInt(measurementDateText.split("/")[2]),
+                        Integer.parseInt(measurementDateText.split("/")[1]),
+                        Integer.parseInt(measurementDateText.split("/")[0])));
                 break;
             }
         }
