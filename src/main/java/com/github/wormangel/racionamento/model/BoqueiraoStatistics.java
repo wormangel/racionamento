@@ -7,8 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static com.github.wormangel.racionamento.util.FormattingUtils.formatDouble;
@@ -71,7 +71,7 @@ public class BoqueiraoStatistics {
 
     @JsonGetter("historicalVolumeData")
     public Map<String, String> getHistoricalVolumeData() {
-        Map result = new HashMap();
+        Map result = new TreeMap();
 
         historicalVolumeData.getLastHistoricalVolumes()
             .forEach((k, v) -> result.put(k, formatDouble(v)));
