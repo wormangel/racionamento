@@ -51,7 +51,8 @@ public class AesaSpider {
                 // Get the measurement date by looking at the value in the 6th column
                 String measurementDateText = tr.select("td:nth-child(6) div font b").get(0).text();
 
-                // Strip the commas before parsing the double
+                // Strip the commas before parsing the double - here the volumes appear as full measures in cubic meters (m3),
+                // but with commas separating every three digits (for readability, I assume)
                 result.setCurrentVolume(Double.valueOf(currentVolumeText.replace(",", "")));
                 result.setMeasureDate(new SimpleDateFormat("dd/MM/yyyy").parse(measurementDateText));
                 break;
@@ -73,7 +74,12 @@ public class AesaSpider {
     private AesaHistoricalVolumeData getHistoricalVolumeData(String month, AesaHistoricalVolumeData toReturn,
                                                              String url) throws IOException {
         log.info("Getting historical data for month {} using URL {}", month, url);
-        // Fetch the HTML page
+
+        // Fetch the HTML page - it' important to note we get some sort of pre-render version of the page here, where the
+        // numeric values are not the same you see on a browser - maybe before some JS magic that jsoup doesn't support
+        // or something (actually the same values - more precise, pre-human-readable-formatting - can be see using Postman
+        // to make requests). In this case (historical volume data), the numbers have a period as a decimal separator
+        // and the unit is millions of m3
         Document doc = Jsoup.connect(url).get();
 
         // For each row representing a day - skip the first row
@@ -90,7 +96,7 @@ public class AesaSpider {
             // Get the current volume by looking at the value in the 4th column, stripping the commas before parsing the double
             String mapKey = formatDateAsMapKey(dayText, month);
             // Remember the volume in these pages are in MILLIONS of m3! Different measure than the current volume page
-            toReturn.getLastHistoricalVolumes().put(mapKey, Double.valueOf(volumeText.replace(".", "")) * 1000000);
+            toReturn.getLastHistoricalVolumes().put(mapKey, Double.valueOf(volumeText) * 1000000);
 
             log.info("Inserted historical volume data for key {}: {}", mapKey, toReturn.getLastHistoricalVolumes().get(mapKey));
 
