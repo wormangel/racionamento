@@ -1,5 +1,6 @@
 package net.wormangel.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.wormangel.service.model.AesaVolumeData;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,11 +16,13 @@ import java.text.SimpleDateFormat;
 
 @Service
 @EnableCaching
+@Slf4j
 public class AesaSpider {
     private static final String CURRENT_VOLUME_URL = "http://site2.aesa.pb.gov.br/aesa/volumesAcudes.do?metodo=preparaUltimosVolumesPorAcude2";
 
-    @Cacheable()
+    @Cacheable("currentVolumeDataCache")
     public AesaVolumeData getCurrentVolumeData() throws IOException, ParseException {
+        log.info("Cache miss on currentVolumeDataCache. Fetching information from AESA...");
         AesaVolumeData result = new AesaVolumeData();
 
         // Fetch the HTML page
