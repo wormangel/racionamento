@@ -89,7 +89,8 @@ public class AesaSpider {
 
             // Get the current volume by looking at the value in the 4th column, stripping the commas before parsing the double
             String mapKey = formatDateAsMapKey(dayText, month);
-            toReturn.getLastHistoricalVolumes().put(mapKey, Double.valueOf(volumeText.replace(".", "")));
+            // Remember the volume in these pages are in MILLIONS of m3! Different measure than the current volume page
+            toReturn.getLastHistoricalVolumes().put(mapKey, Double.valueOf(volumeText.replace(".", "")) * 1000000);
 
             log.info("Inserted historical volume data for key {}: {}", mapKey, toReturn.getLastHistoricalVolumes().get(mapKey));
 

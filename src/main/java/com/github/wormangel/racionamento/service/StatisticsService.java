@@ -26,6 +26,10 @@ public class StatisticsService {
         AesaHistoricalVolumeData historicalVolumeData = aesaSpider.getHistoricalVolumeData(
                 String.format("%02d", today.getDayOfMonth()), String.format("%02d", today.getMonth().getValue()));
 
+        double measurementsDelta = historicalVolumeData.getLastHistoricalVolumes().values()
+                .stream()
+                .reduce(0d, (a, b) -> b - a) / 10;
+
         return BoqueiraoStatistics.builder()
                 .maxVolume(BoqueiraoConstants.MAX_VOLUME)
                 .deadVolumeThreshold(BoqueiraoConstants.DEAD_VOLUME_THRESHOLD)
@@ -34,6 +38,8 @@ public class StatisticsService {
                 .date(currentVolumeData.getMeasureDate())
                 .percentageFull((currentVolumeData.getCurrentVolume() / BoqueiraoConstants.MAX_VOLUME) * 100)
                 .over( currentVolumeData.getCurrentVolume() > BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD )
+                .measurementsDeltaAverage(measurementsDelta)
+                .historicalVolumeData(historicalVolumeData)
                 .build();
     }
 
