@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Map;
 
 @RestController
 public class HomeController {
     @Autowired
     private StatisticsService statisticsService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<BoqueiraoStatistics> statistics() throws IOException, ParseException {
         return new ResponseEntity<BoqueiraoStatistics>(statisticsService.getStatistics(), HttpStatus.OK);
     }
