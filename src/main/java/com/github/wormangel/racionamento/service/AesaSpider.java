@@ -7,9 +7,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -20,9 +22,22 @@ import java.util.Collections;
 @EnableCaching
 @Slf4j
 public class AesaSpider {
+    private static final String DATA_URL = "http://www.aesa.pb.gov.br/aesa-website/resources/data/volumeAcudes/porAcude/531/2017/data.json";
     private static final String CURRENT_VOLUME_URL = "http://site2.aesa.pb.gov.br/aesa/volumesAcudes.do?metodo=preparaUltimosVolumesPorAcude2";
     private static final String DAILY_VOLUME_CURRENT_MONTH_URL = "http://site2.aesa.pb.gov.br/aesa/volumesAcudes.do?metodo=preparaVolumesDiariosAtual";
     private static final String DAILY_VOLUME_PREVIOUS_MONTH_URL = "http://site2.aesa.pb.gov.br/aesa/volumesAcudes.do?metodo=preparaVolumesDiariosAnterior";
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Cacheable("volumeDataCache")
+    public AesaVolumeDataJson getVolumeData() {
+        log.info("Cache miss on volumeDataCache. Fetching information from AESA...");
+
+        AesaVolumeDataJson response = restTemplate.getForEntity(DATA_URL, AesaVolumeDataJson.class).getBody();
+
+        return response;
+    }
 
     @Cacheable("currentVolumeDataCache")
     public AesaVolumeData getCurrentVolumeData() throws IOException, ParseException {
