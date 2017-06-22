@@ -1,4 +1,4 @@
-package com.github.wormangel.racionamento.service;
+package com.github.wormangel.racionamento.service.spider.model;
 
 import lombok.Data;
 

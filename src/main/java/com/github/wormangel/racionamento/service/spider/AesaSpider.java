@@ -1,5 +1,6 @@
-package com.github.wormangel.racionamento.service;
+package com.github.wormangel.racionamento.service.spider;
 
+import com.github.wormangel.racionamento.service.spider.model.AesaVolumeDataJson;
 import com.github.wormangel.racionamento.service.model.AesaHistoricalVolumeData;
 import com.github.wormangel.racionamento.service.model.AesaVolumeData;
 import lombok.extern.slf4j.Slf4j;

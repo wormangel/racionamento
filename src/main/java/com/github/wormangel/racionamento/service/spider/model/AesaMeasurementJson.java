@@ -1,4 +1,4 @@
-package com.github.wormangel.racionamento.service;
+package com.github.wormangel.racionamento.service.spider.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;

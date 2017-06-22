@@ -4,6 +4,7 @@ import com.github.wormangel.racionamento.model.BoqueiraoConstants;
 import com.github.wormangel.racionamento.model.BoqueiraoStatistics;
 import com.github.wormangel.racionamento.service.model.AesaHistoricalVolumeData;
 import com.github.wormangel.racionamento.service.model.AesaVolumeData;
+import com.github.wormangel.racionamento.service.spider.AesaSpider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
