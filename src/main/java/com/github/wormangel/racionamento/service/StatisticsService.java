@@ -2,7 +2,6 @@ package com.github.wormangel.racionamento.service;
 
 import com.github.wormangel.racionamento.model.BoqueiraoConstants;
 import com.github.wormangel.racionamento.model.BoqueiraoStatistics;
-import com.github.wormangel.racionamento.service.model.AesaHistoricalVolumeData;
 import com.github.wormangel.racionamento.service.model.AesaVolumeData;
 import com.github.wormangel.racionamento.service.spider.AesaSpider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.stream.IntStream;
 
 @Service
 public class StatisticsService {
@@ -18,40 +18,36 @@ public class StatisticsService {
     private AesaSpider aesaSpider;
 
     public BoqueiraoStatistics getStatistics() throws IOException, ParseException {
-        LocalDate today = LocalDate.now();
-
-        // Get the current volume data
-        AesaVolumeData currentVolumeData = aesaSpider.getCurrentVolumeData();
-
-        // Get the historical volume data (last ten days)
-        AesaHistoricalVolumeData historicalVolumeData = aesaSpider.getHistoricalVolumeData(
-                String.format("%02d", today.getDayOfMonth()), String.format("%02d", today.getMonth().getValue()));
+        // Get the volume data
+        AesaVolumeData data = aesaSpider.getVolumeData();
 
         // Calculate the measurements delta - the rate at which the weir is filling up
-        double measurementsDelta = historicalVolumeData.getLastHistoricalVolumes().values()
-                .stream()
-                .reduce(0d, (a, b) -> b - a) / 10;
+        // We calculate the delta between every pair of days for the last ten days, then sum then and divide by the
+        // number of measurements (10)
+        double measurementsDelta = IntStream.range(0, 10)
+                .mapToDouble(x -> data.getHistoricalMeasurements().get(x).getVolume() - data.getHistoricalMeasurements().get(x+1).getVolume())
+                .reduce(0d, (a, b) -> a + b) / 10;
 
         // Calculate the predicted date at which the weir will be filled
-        double accumulatedVolume = currentVolumeData.getCurrentVolume();
+        double accumulatedVolume = data.getCurrentMeasurement().getVolume();
         int daysToHappiness = 0;
         while (accumulatedVolume < BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD) {
             accumulatedVolume += measurementsDelta;
             daysToHappiness++;
         }
 
-        LocalDate happinessDate = currentVolumeData.getMeasureDate().plusDays(daysToHappiness);
+        LocalDate happinessDate = data.getCurrentMeasurement().getDate().plusDays(daysToHappiness);
 
         return BoqueiraoStatistics.builder()
                 .maxVolume(BoqueiraoConstants.MAX_VOLUME)
                 .deadVolumeThreshold(BoqueiraoConstants.DEAD_VOLUME_THRESHOLD)
                 .rationingVolumeThreshold(BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD)
-                .currentVolume(currentVolumeData.getCurrentVolume())
-                .date(currentVolumeData.getMeasureDate())
-                .percentageFull((currentVolumeData.getCurrentVolume() / BoqueiraoConstants.MAX_VOLUME) * 100)
-                .over( currentVolumeData.getCurrentVolume() > BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD )
+                .currentVolume(data.getCurrentMeasurement().getVolume())
+                .date(data.getCurrentMeasurement().getDate())
+                .percentageFull((data.getCurrentMeasurement().getVolume() / BoqueiraoConstants.MAX_VOLUME) * 100)
+                .over( data.getCurrentMeasurement().getVolume() > BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD )
                 .measurementsDeltaAverage(measurementsDelta)
-                .historicalVolumeData(historicalVolumeData)
+                .lastHistoricalVolumes(data.getHistoricalMeasurements())
                 .daysToHappiness(daysToHappiness)
                 .happinessDate(happinessDate)
                 .build();

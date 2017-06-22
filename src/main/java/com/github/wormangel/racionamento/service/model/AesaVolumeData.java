@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AesaVolumeData {
-    private Double currentVolume;
-    private LocalDate measureDate;
+    private VolumeMeasurement currentMeasurement;
+    private List<VolumeMeasurement> historicalMeasurements = new ArrayList<>();
 }

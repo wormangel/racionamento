@@ -2,13 +2,12 @@ package com.github.wormangel.racionamento.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.github.wormangel.racionamento.service.model.AesaHistoricalVolumeData;
+import com.github.wormangel.racionamento.service.model.VolumeMeasurement;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static com.github.wormangel.racionamento.util.FormattingUtils.formatDouble;
@@ -30,7 +29,7 @@ public class BoqueiraoStatistics {
 
     private Double currentVolume;
 
-    private AesaHistoricalVolumeData historicalVolumeData;
+    private List<VolumeMeasurement> lastHistoricalVolumes;
 
     // Calculated
     
@@ -74,15 +73,5 @@ public class BoqueiraoStatistics {
     @JsonGetter("measurementsDeltaAverage")
     public String getMeasurementsDeltaAverage() {
         return formatDouble(measurementsDeltaAverage);
-    }
-
-    @JsonGetter("historicalVolumeData")
-    public Map<String, String> getHistoricalVolumeData() {
-        Map result = new TreeMap();
-
-        historicalVolumeData.getLastHistoricalVolumes()
-            .forEach((k, v) -> result.put(k, formatDouble(v)));
-
-        return result;
     }
 }
