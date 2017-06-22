@@ -44,14 +44,14 @@
         <p/>
 
         <h2>
-            <span class="acabou-flag" th:text="${data.over ? 'SIM' : 'NÃO :('}"></span>
+            <span class="acabou-flag" th:text="${data.over ? 'SIM!' : 'NÃO :('}"></span>
         </h2>
 
-        <h3>
+        <h3 th:if="${!data.over}">
             Mas no ritmo atual, em mais ou menos <strong><span class="dias-que-faltam" th:text='${data.daysToHappiness}'></span></strong> dias o racionamento acaba!
         </h3>
 
-        <h3>
+        <h3 th:if="${!data.over}">
             Anote: o dia <strong><span class="dias-que-faltam" th:text='${data.happinessDate}'></span></strong> pode ser o fim do racionamento em Campina!
         </h3>
 
@@ -59,7 +59,7 @@
             <h4>
                 O Açude Epitácio Pessoa tem uma capacidade total de <span class="semi-emphasis" th:text="${data.maxVolume} + 'm&sup3;'"></span>.
             </h4>
-            <h4>
+            <h4 th:if="${!data.over}">
                 <a href="http://g1.globo.com/pb/paraiba/noticia/2017/03/cagepa-preve-fim-de-racionamento-apos-boqueirao-sair-de-volume-morto.html" target="_blank">Segundo a CAGEPA</a>,
                 o racionamento acabará quando Boqueirão sair do volume morto - <span class="semi-emphasis" th:text="${data.deadVolumeThreshold} + '%'"></span>
                 do volume total ou <span class="semi-emphasis" th:text="${data.rationingVolumeThreshold} + 'm&sup3;'"></span>.
