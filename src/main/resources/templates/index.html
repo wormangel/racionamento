@@ -1,39 +1,79 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="bootVersion" type="java.lang.String"*/-->
+<!--/*@thymesVar id="activeProfiles" type="java.lang.String"*/-->
+<!--/*@thymesVar id="serverToDeployments" type="java.util.Map<java.lang.String,java.util.List<ch.mobi.liima.client.dto.Deployment>>"*/-->
+<!--/*@thymesVar id="utils" type="ch.package.controller.util.SomeUtils"*/-->
 <head>
-    <title>Spring Boot Thymeleaf Hello World Example</title>
+    <title>Racionamento CG</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <link rel="stylesheet" type="text/css"
           href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 
     <link rel="stylesheet" th:href="@{/css/main.css}"
-          href="../../css/main.css" />
+          href="../static/css/main.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
 
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Spring Boot</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!--<nav class="navbar navbar-inverse">-->
+    <!--<div class="container">-->
+        <!--<div class="navbar-header">-->
+            <!--<a class="navbar-brand" href="#">Spring Boot</a>-->
+        <!--</div>-->
+        <!--<div id="navbar" class="collapse navbar-collapse">-->
+            <!--<ul class="nav navbar-nav">-->
+                <!--<li class="active"><a href="#">Home</a></li>-->
+                <!--<li><a href="#about">About</a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</nav>-->
 
 <div class="container">
 
-    <div class="starter-template">
-        <h1>Spring Boot Web Thymeleaf Example</h1>
+    <div class="starter-template text-center">
+        <h1>O Açude de Boqueirão saiu do volume morto?</h1>
+        <p/>
+
         <h2>
-            <span th:text="'Message: ' + ${message}"></span>
+            <span class="acabou-flag" th:text="${data.over ? 'SIM' : 'NÃO :('}"></span>
         </h2>
+
+        <h3>
+            Mas no ritmo atual, em mais ou menos <strong><span class="dias-que-faltam" th:text='${data.daysToHappiness}'></span></strong> dias o racionamento acaba!
+        </h3>
+
+        <h3>
+            Anote: o dia <strong><span class="dias-que-faltam" th:text='${data.happinessDate}'></span></strong> pode ser o fim do racionamento em Campina!
+        </h3>
+
+        <div class="data-box">
+            <h4>
+                O Açude Epitácio Pessoa tem uma capacidade total de <span class="semi-emphasis" th:text="${data.maxVolume} + 'm&sup3;'"></span>.
+            </h4>
+            <h4>
+                <a href="http://g1.globo.com/pb/paraiba/noticia/2017/03/cagepa-preve-fim-de-racionamento-apos-boqueirao-sair-de-volume-morto.html" target="_blank">Segundo a CAGEPA</a>,
+                o racionamento acabará quando Boqueirão sair do volume morto - <span class="semi-emphasis" th:text="${data.deadVolumeThreshold} + '%'"></span>
+                do volume total ou <span class="semi-emphasis" th:text="${data.rationingVolumeThreshold} + 'm&sup3;'"></span>.
+            </h4>
+            <p class="spacer"></p>
+            <h4>
+                O volume atual do açude é <span class="semi-emphasis" th:text="${data.currentVolume} + 'm&sup3;'"></span>, registrado em <span class="semi-emphasis" th:text='${data.date}'></span>.
+            </h4>
+            <p class="spacer"></p>
+            <h4>
+                Estamos a <span class="semi-emphasis" th:text="${data.percentageFull} + '%'"></span> do volume total
+                e a média de aumento atual é de <span class="semi-emphasis" th:text="${data.measurementsDeltaAverage} + 'm&sup3;'"></span> por dia*.
+            </h4>
+            <p>
+                <em>* Considerando os últimos 10 dias - dados da <a href="http://www.aesa.pb.gov.br/aesa-website/monitoramento/volume-acude/?id_acude=531">AESA</a></em>
+            </p>
+        </div>
+
     </div>
 
 </div>

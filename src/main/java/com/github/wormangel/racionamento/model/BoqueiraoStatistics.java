@@ -7,7 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static com.github.wormangel.racionamento.util.FormattingUtils.formatDouble;
@@ -73,5 +77,15 @@ public class BoqueiraoStatistics {
     @JsonGetter("measurementsDeltaAverage")
     public String getMeasurementsDeltaAverage() {
         return formatDouble(measurementsDeltaAverage);
+    }
+
+    @JsonGetter("happinessDate")
+    public String getHappinessDate() {
+        return DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(new Locale("pt","BR")).format(happinessDate);
+    }
+
+    @JsonGetter("date")
+    public String getDate() {
+        return DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(new Locale("pt","BR")).format(date);
     }
 }

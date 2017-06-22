@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
@@ -47,7 +48,7 @@ public class StatisticsService {
                 .percentageFull((data.getCurrentMeasurement().getVolume() / BoqueiraoConstants.MAX_VOLUME) * 100)
                 .over( data.getCurrentMeasurement().getVolume() > BoqueiraoConstants.RATIONING_VOLUME_THRESHOLD )
                 .measurementsDeltaAverage(measurementsDelta)
-                .lastHistoricalVolumes(data.getHistoricalMeasurements())
+                .lastHistoricalVolumes(data.getHistoricalMeasurements().stream().limit(10).collect(Collectors.toList()))
                 .daysToHappiness(daysToHappiness)
                 .happinessDate(happinessDate)
                 .build();
