@@ -26,7 +26,7 @@ public class WebController {
         return "index";
     }
 
-    @Scheduled(cron = "0 15 10 ? * *")
+    @Scheduled(cron = "0 15 10 ? * *", zone = "America/Recife")
     public void triggerStatisticsUpdate() throws IOException, ParseException {
         log.info("Good morning! Scheduled task to update the statistics starting...");
         new SimpleAsyncTaskExecutor().execute(this::update);
