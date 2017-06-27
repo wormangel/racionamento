@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class WebController {
         new SimpleAsyncTaskExecutor().execute(this::update);
     }
 
+    @CacheEvict("statisticsCache")
     public void update() {
         try {
             statisticsService.getStatistics();
