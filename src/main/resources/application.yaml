@@ -4,3 +4,5 @@ spring:
       spec: expireAfterAccess=86400s # 1 day
   thymeleaf:
     cache: false
+
+s3.bucket: racionamento.wormangel.net

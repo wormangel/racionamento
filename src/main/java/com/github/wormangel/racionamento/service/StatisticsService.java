@@ -1,25 +1,38 @@
 package com.github.wormangel.racionamento.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.github.wormangel.racionamento.model.BoqueiraoConstants;
 import com.github.wormangel.racionamento.model.BoqueiraoStatistics;
 import com.github.wormangel.racionamento.service.model.AesaVolumeData;
 import com.github.wormangel.racionamento.service.spider.AesaSpider;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.imageio.ImageIO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class StatisticsService {
     @Autowired
     private AesaSpider aesaSpider;
+
+    @Value("${s3.bucket}")
+    private String bucket;
+
+    @Autowired
+    private ImageService imageService;
 
     @Cacheable("statisticsCache")
     public BoqueiraoStatistics getStatistics() throws IOException, ParseException {
@@ -43,6 +56,19 @@ public class StatisticsService {
         }
 
         LocalDate happinessDate = data.getCurrentMeasurement().getDate().plusDays(daysToHappiness);
+
+        // Upload the new image to s3
+        AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
+
+        // Create a temporary file first
+        File destination = File.createTempFile("new", ".png");
+        BufferedImage ogImage = imageService.getOgImage(daysToHappiness);
+        ImageIO.write(ogImage, "png", destination);
+
+        // Make sure the file is publicly accessible
+        PutObjectRequest s3request = new PutObjectRequest(bucket, "ogImage.png",destination).withCannedAcl(
+                CannedAccessControlList.PublicRead);
+        s3Client.putObject(s3request);
 
         return BoqueiraoStatistics.builder()
                 .maxVolume(BoqueiraoConstants.MAX_VOLUME)
