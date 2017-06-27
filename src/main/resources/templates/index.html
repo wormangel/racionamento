@@ -19,9 +19,22 @@
           href="../static/css/main.css" />
 
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
 
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&amp;appId=234965317022146&amp;version=v2.9";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 
 <!--<nav class="navbar navbar-inverse">-->
     <!--<div class="container">-->
@@ -77,6 +90,10 @@
                 <em>* Considerando os últimos 10 dias - dados da <a href="http://www.aesa.pb.gov.br/aesa-website/monitoramento/volume-acude/?id_acude=531">AESA</a></em>
             </p>
         </div>
+
+        <p class="spacer"></p>
+
+        <div class="fb-share-button" data-href="http://racionamento.herokuapp.com/" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fracionamento.herokuapp.com%2F&amp;src=sdkpreparse">Share</a></div>
 
     </div>
 
