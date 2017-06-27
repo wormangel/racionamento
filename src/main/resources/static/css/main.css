@@ -31,3 +31,17 @@ h2 {
     margin-left: 2px;
     margin-right: 2px;
 }
+
+.grayed {
+    color: lightgray;
+    text-decoration: underline;
+}
+
+.grayed:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+.conselho {
+    font-size: larger;
+}
