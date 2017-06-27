@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,17 +59,12 @@ public class StatisticsService {
         LocalDate happinessDate = data.getCurrentMeasurement().getDate().plusDays(daysToHappiness);
 
         // Upload the new image to s3
-        AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
+        log.info("Starting task in the background to generate a new ogImage and put it in s3..");
 
-        // Create a temporary file first
-        File destination = File.createTempFile("new", ".png");
-        BufferedImage ogImage = imageService.getOgImage(daysToHappiness);
-        ImageIO.write(ogImage, "png", destination);
+        S3ImageUpdater updateS3ImageAsyncTask = new S3ImageUpdater(daysToHappiness);
+        new SimpleAsyncTaskExecutor().execute(updateS3ImageAsyncTask);
 
-        // Make sure the file is publicly accessible
-        PutObjectRequest s3request = new PutObjectRequest(bucket, "ogImage.png",destination).withCannedAcl(
-                CannedAccessControlList.PublicRead);
-        s3Client.putObject(s3request);
+        log.info("Task is executing in the background. Returning the statistics object.");
 
         return BoqueiraoStatistics.builder()
                 .maxVolume(BoqueiraoConstants.MAX_VOLUME)
@@ -83,6 +79,35 @@ public class StatisticsService {
                 .daysToHappiness(daysToHappiness)
                 .happinessDate(happinessDate)
                 .build();
+    }
+
+    private class S3ImageUpdater implements Runnable {
+        private int days;
+
+        public S3ImageUpdater(int value) {
+            days = value;
+        }
+
+        @Override
+        public void run() {
+            try {
+                AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
+
+                // Create a temporary file first
+                File destination = File.createTempFile("new", ".png");
+                BufferedImage ogImage = imageService.getOgImage(days);
+                ImageIO.write(ogImage, "png", destination);
+
+                // Make sure the file is publicly accessible
+                PutObjectRequest s3request = new PutObjectRequest(bucket, "ogImage.png",destination).withCannedAcl(
+                        CannedAccessControlList.PublicRead);
+                s3Client.putObject(s3request);
+
+                log.info("Image updated to s3 successfully!");
+            } catch (Exception e) {
+                log.error("Error saving the new ogImage to s3!", e);
+            }
+        }
     }
 
 }
