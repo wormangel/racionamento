@@ -10,15 +10,18 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class ImageService {
     @Cacheable("ogImage")
     public BufferedImage getOgImage(int days) throws IOException {
+        log.info("Cache miss on ogImage cache for {} days. Regenerating the image...", days);
         // Generate the new image
         Resource resource = new ClassPathResource("static/img/ogimg.png");
         InputStream resourceInputStream = resource.getInputStream();

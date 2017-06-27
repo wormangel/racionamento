@@ -4,7 +4,9 @@ import com.github.wormangel.racionamento.model.BoqueiraoConstants;
 import com.github.wormangel.racionamento.model.BoqueiraoStatistics;
 import com.github.wormangel.racionamento.service.model.AesaVolumeData;
 import com.github.wormangel.racionamento.service.spider.AesaSpider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,11 +16,14 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
+@Slf4j
 public class StatisticsService {
     @Autowired
     private AesaSpider aesaSpider;
 
+    @Cacheable("statisticsCache")
     public BoqueiraoStatistics getStatistics() throws IOException, ParseException {
+        log.info("Cache miss on statisticsCache. Fetching information from AESA and recalculating Statistics...");
         // Get the volume data
         AesaVolumeData data = aesaSpider.getVolumeData();
 

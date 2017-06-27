@@ -1,19 +1,17 @@
 package com.github.wormangel.racionamento.service.spider;
 
+import com.github.wormangel.racionamento.service.model.AesaVolumeData;
 import com.github.wormangel.racionamento.service.model.VolumeMeasurement;
 import com.github.wormangel.racionamento.service.spider.model.AesaMeasurementJson;
 import com.github.wormangel.racionamento.service.spider.model.AesaVolumeDataJson;
-import com.github.wormangel.racionamento.service.model.AesaVolumeData;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @EnableCaching
@@ -24,10 +22,7 @@ public class AesaSpider {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Cacheable("volumeDataCache")
     public AesaVolumeData getVolumeData() {
-        log.info("Cache miss on volumeDataCache. Fetching information from AESA...");
-
         // Get the response
         AesaVolumeDataJson wsResponse = restTemplate.getForEntity(DATA_URL, AesaVolumeDataJson.class).getBody();
         // Sort the collection
