@@ -11,17 +11,22 @@ import com.github.wormangel.racionamento.service.spider.AesaSpider;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @Slf4j
@@ -104,9 +109,29 @@ public class StatisticsService {
                 s3Client.putObject(s3request);
 
                 log.info("Image updated to s3 successfully!");
+
+                log.info("Triggering Facebook Open Graph cache refresh..");
+                triggerFbCacheRefresh();
             } catch (Exception e) {
                 log.error("Error saving the new ogImage to s3!", e);
             }
+        }
+
+        private void triggerFbCacheRefresh() {
+            RestTemplate restTemplate = new RestTemplate();
+            URI uri = UriComponentsBuilder.fromUriString("https://graph.facebook.com")
+                    .queryParam("id", "http://racionamento.herokuapp.com")
+                    .queryParam("scrape", "true")
+                    .build()
+                    .toUri();
+
+            try {
+                ResponseEntity<String> response = restTemplate.postForEntity(uri, null, String.class);
+                log.info("Open Graph API refresh call succeeded! Response code: {}", response.getStatusCode());
+            } catch (Exception e) {
+                log.error("Error updating Open Graph information!", e);
+            }
+
         }
     }
 
