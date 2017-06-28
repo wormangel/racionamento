@@ -1,4 +1,4 @@
-package com.github.wormangel.racionamento.service.model;
+package com.github.wormangel.racionamento.service.spider.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AesaVolumeData {
+public class VolumeData {
     private VolumeMeasurement currentMeasurement;
     private List<VolumeMeasurement> historicalMeasurements = new ArrayList<>();
 }

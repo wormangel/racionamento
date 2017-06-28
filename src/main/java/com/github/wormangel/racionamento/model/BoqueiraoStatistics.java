@@ -2,12 +2,11 @@ package com.github.wormangel.racionamento.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.github.wormangel.racionamento.service.model.VolumeMeasurement;
+import com.github.wormangel.racionamento.service.spider.model.VolumeMeasurement;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;

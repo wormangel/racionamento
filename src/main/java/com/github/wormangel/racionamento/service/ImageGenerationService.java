@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class ImageService {
+public class ImageGenerationService {
     public BufferedImage getOgImage(int days) throws IOException {
         // Generate the new image
         Resource resource = new ClassPathResource("static/img/ogimg.png");

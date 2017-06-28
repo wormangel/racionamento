@@ -1,7 +1,7 @@
 package com.github.wormangel.racionamento.service.spider;
 
-import com.github.wormangel.racionamento.service.model.AesaVolumeData;
-import com.github.wormangel.racionamento.service.model.VolumeMeasurement;
+import com.github.wormangel.racionamento.service.spider.model.VolumeData;
+import com.github.wormangel.racionamento.service.spider.model.VolumeMeasurement;
 import com.github.wormangel.racionamento.service.spider.model.AesaMeasurementJson;
 import com.github.wormangel.racionamento.service.spider.model.AesaVolumeDataJson;
 import java.util.Collections;
@@ -22,7 +22,7 @@ public class AesaSpider {
     @Autowired
     private RestTemplate restTemplate;
 
-    public AesaVolumeData getVolumeData() {
+    public VolumeData getVolumeData() {
         // Get the response
         AesaVolumeDataJson wsResponse = restTemplate.getForEntity(DATA_URL, AesaVolumeDataJson.class).getBody();
         // Sort the collection
@@ -33,7 +33,7 @@ public class AesaSpider {
         AesaMeasurementJson currentMeasure = wsResponse.getData().get(0);
 
         // Our response object
-        AesaVolumeData filteredData = new AesaVolumeData();
+        VolumeData filteredData = new VolumeData();
 
         filteredData.setCurrentMeasurement(new VolumeMeasurement(currentMeasure.getMeasurementDate(),
                 currentMeasure.getMeasuredVolume()));
