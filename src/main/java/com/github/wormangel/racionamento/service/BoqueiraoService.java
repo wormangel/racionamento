@@ -1,9 +1,12 @@
 package com.github.wormangel.racionamento.service;
 
 import com.github.wormangel.racionamento.model.BoqueiraoStatistics;
+import java.io.IOException;
+import java.text.ParseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,12 +37,9 @@ public class BoqueiraoService {
             return statistics;
         }
 
+        // This needs to be async otherwise Facebook will hit us before we save the cache
         log.info("Step 3 - Triggering Facebook Open Graph cache refresh..");
-        boolean openGraphRefreshed = openGraphUpdaterService.triggerFbCacheRefresh();
-
-        if (!openGraphRefreshed) {
-            log.warn("Open Graph refresh failed! The link shares will display outdated information!");
-        }
+        new SimpleAsyncTaskExecutor().execute(openGraphUpdaterService::triggerFbCacheRefresh);
 
         return statistics;
     }
