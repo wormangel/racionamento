@@ -1,4 +1,4 @@
-package com.github.wormangel.racionamento;
+package com.github.wormangel.racionamento.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
