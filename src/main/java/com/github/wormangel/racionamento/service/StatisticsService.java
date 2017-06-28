@@ -99,7 +99,7 @@ public class StatisticsService {
                 ImageIO.write(ogImage, "png", destination);
 
                 // Make sure the file is publicly accessible
-                PutObjectRequest s3request = new PutObjectRequest(bucket, "ogImage.png",destination).withCannedAcl(
+                PutObjectRequest s3request = new PutObjectRequest(bucket, "ogImage" + days + ".png",destination).withCannedAcl(
                         CannedAccessControlList.PublicRead);
                 s3Client.putObject(s3request);
 
